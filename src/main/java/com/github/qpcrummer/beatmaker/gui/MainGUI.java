@@ -4,7 +4,6 @@ import com.github.qpcrummer.beatmaker.audio.MusicPlayer;
 import com.github.qpcrummer.beatmaker.audio.StemmedAudio;
 import com.github.qpcrummer.beatmaker.data.Data;
 import com.github.qpcrummer.beatmaker.processing.BeatFile;
-import com.github.qpcrummer.beatmaker.processing.BeatManager;
 import com.github.qpcrummer.beatmaker.processing.Generator;
 import com.github.qpcrummer.beatmaker.utils.Config;
 import com.github.qpcrummer.beatmaker.utils.DemucsUtils;

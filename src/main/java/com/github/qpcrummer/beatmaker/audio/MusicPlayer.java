@@ -52,19 +52,39 @@ public class MusicPlayer {
         }
     }
 
-    public static boolean setPosition(long microsecondPosition) {
+    private static boolean setPosition(long microsecondPosition, boolean forceful) {
         if (clip == null) {
             return false;
         }
-        pause();
-        position = microsecondPosition;
+
+        if (!forceful) {
+            pause();
+        }
+        // Check for invalid times
+        if (microsecondPosition < 0) {
+            position = 0;
+            return true;
+        } else if (microsecondPosition > MusicPlayer.getSongLengthMilliseconds() * 1000) {
+            position = MusicPlayer.getSongLengthMilliseconds() * 1000;
+            return true;
+        } else {
+            position = microsecondPosition;
+        }
+
         MainGUI.time.set(BeatFile.millisecondsToSecondsFormatted(MusicPlayer.getPositionMilliseconds()));
+        if (forceful) {
+            clip.setMicrosecondPosition(microsecondPosition);
+        }
         return true;
+    }
+
+    public static boolean setPositionMs(long millisecondPosition) {
+        return setPosition(millisecondPosition * 1000, true);
     }
 
     public static void rewind() {
         MusicPlayer.pause();
-        MusicPlayer.setPosition(0);
+        MusicPlayer.setPosition(0, false);
         BeatManager.resetBeats();
     }
 

@@ -1,12 +1,15 @@
 package com.github.qpcrummer.beatmaker;
 
+import com.github.qpcrummer.beatmaker.audio.MusicPlayer;
 import com.github.qpcrummer.beatmaker.data.Data;
 import com.github.qpcrummer.beatmaker.gui.*;
 import com.github.qpcrummer.beatmaker.processing.BeatManager;
 import com.github.qpcrummer.beatmaker.utils.Config;
 import com.github.qpcrummer.beatmaker.utils.DemucsInstaller;
+import imgui.ImGui;
 import imgui.app.Application;
 import imgui.app.Configuration;
+import imgui.flag.ImGuiKey;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -67,6 +70,7 @@ public class Main extends Application {
         Recorder.render();
         DemucsGUI.render();
         BeatGenerationGUI.render();
+        checkButtons();
     }
 
     @Override
@@ -92,5 +96,28 @@ public class Main extends Application {
     protected void disposeWindow() {
         super.disposeWindow();
         System.exit(1);
+    }
+
+    // Check if buttons are pressed
+    private int keyDelay = 5;
+    protected void checkButtons() {
+        tickKeyDelay();
+        if (keyDelay == 5) {
+            if (ImGui.isKeyPressed(ImGuiKey.LeftArrow)) {
+                // Go back 1 second
+                MusicPlayer.setPositionMs(MusicPlayer.getPositionMilliseconds() - 1000);
+                keyDelay = 0;
+            } else if (ImGui.isKeyPressed(ImGuiKey.RightArrow)) {
+                // Go forward 1 second
+                MusicPlayer.setPositionMs(MusicPlayer.getPositionMilliseconds() + 1000);
+                keyDelay = 0;
+            }
+        }
+    }
+
+    private void tickKeyDelay() {
+        if (keyDelay < 5) {
+            keyDelay++;
+        }
     }
 }
